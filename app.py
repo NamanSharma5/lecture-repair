@@ -1,5 +1,7 @@
-from flask import Flask, request
+#MUST RUN FROM THIS DIRECTORY (piano-dynamics) TO WORK
+from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dynamics_logic import send_image_to_gpt, encode_image
 
 app = Flask(__name__)
 CORS(app)
@@ -12,10 +14,10 @@ def upload_image():
     if file.filename == '':
         return 'No selected file', 400
     if file:
-        # Process the file here
-        # e.g., save it, run an image processing function, etc.
-        print('File received and processed successfully!')
-        return 'File processed', 200
+        dynamics = send_image_to_gpt(file)
+        # dynamics is a string in 
+        print(dynamics)
+        return jsonify(data=dynamics), 200
 
 #setup basic home page showing backend is running
 @app.route('/')

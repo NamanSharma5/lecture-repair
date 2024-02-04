@@ -3,16 +3,24 @@ import base64
 
 from example_response import example_dynamics
 
-def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+import os
+
+def encode_image(image_file_to_encode = "chopin.jpg"):
+    # print root directory
+    print(os.getcwd())
+
+    if type(image_file_to_encode) == str:
+        with open(image_file_to_encode, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+            return encoded_string
+        
+    encoded_string = base64.b64encode(image_file_to_encode.read()).decode("utf-8")
     return encoded_string
 
 image_path_example = "chopin.jpg"
 
-image_path_test = "beethoven.jpg"
-
-def send_image_to_gpt():
+def send_image_to_gpt(image_file):
+    encoded_image = encode_image(image_file)
     response = openai.ChatCompletion.create(
     model="gpt-4-vision-preview",
     messages=[
@@ -34,7 +42,7 @@ def send_image_to_gpt():
             {
             "type": "image_url",
             "image_url": {
-                "url": f"data:image/jpeg;base64,{encode_image(image_path_test)}",
+                "url": f"data:image/jpeg;base64,{encoded_image}",
             },
             },
         ],
@@ -68,11 +76,11 @@ def send_text_to_gpt():
 
 if __name__ == "__main__":
 
-    response = send_image_to_gpt()
-    # response = send_text_to_gpt()
+    # check if chopin.jpg can be read and encoded
+    encode_image()
 
-    with open("response_example.txt", "w", errors="ignore") as file:
-        file.write(response)
+
+ 
 
 
 
