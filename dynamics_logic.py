@@ -4,6 +4,7 @@ import base64
 from example_response import example_dynamics
 
 import os
+openai.api_key = "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"
 
 def encode_image(image_file_to_encode = "chopin.jpg"):
     # print root directory
